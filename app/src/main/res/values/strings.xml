@@ -1,0 +1,9 @@
+<resources>
+	<string name="app_name">DailyFinance</string>
+	<string name="daily_money_default_text">Daily: ---,-- € (for -- days)</string>
+	<string name="total_money_default_text">Total: ---,-- €</string>
+	<string name="subtract_button_text">-</string>
+	<string name="add_button_text">+</string>
+	<string name="reset_button_text">Reset</string>
+	<string name="txt_edit_money_hint_text">Amount</string>
+</resources>

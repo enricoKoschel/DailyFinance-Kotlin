@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<TextView
+		android:id="@+id/txtMoneyDaily"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/daily_money_default_text"
+		android:textAlignment="center"
+		android:textSize="24sp" />
+
+	<TextView
+		android:id="@+id/txtMoneyTotal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/total_money_default_text"
+		android:textAlignment="center"
+		android:textSize="24sp" />
+
+	<Space
+		android:layout_width="match_parent"
+		android:layout_height="281dp" />
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<Button
+			android:id="@+id/btnSub"
+			style="@android:style/Widget.Material.Button"
+			android:layout_width="wrap_content"
+			android:layout_height="59dp"
+			android:text="@string/subtract_button_text" />
+
+		<EditText
+			android:id="@+id/txtEditMoney"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:autofillHints=""
+			android:ems="10"
+			android:hint="@string/txt_edit_money_hint_text"
+			android:inputType="numberDecimal"
+			android:minHeight="48dp"
+			android:textAlignment="center" />
+
+		<Button
+			android:id="@+id/btnAdd"
+			style="@android:style/Widget.Material.Button"
+			android:layout_width="wrap_content"
+			android:layout_height="59dp"
+			android:text="@string/add_button_text" />
+	</LinearLayout>
+
+	<Button
+		android:id="@+id/btnReset"
+		style="@android:style/Widget.Material.Button"
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:text="@string/reset_button_text" />
+</LinearLayout>
