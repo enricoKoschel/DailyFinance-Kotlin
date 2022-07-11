@@ -8,7 +8,7 @@
 		android:id="@+id/txtMoneyDaily"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/daily_money_default_text"
+		android:text="@string/daily_money_text"
 		android:textAlignment="center"
 		android:textSize="24sp" />
 
@@ -16,7 +16,7 @@
 		android:id="@+id/txtMoneyTotal"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/total_money_default_text"
+		android:text="@string/total_money_text"
 		android:textAlignment="center"
 		android:textSize="24sp" />
 
@@ -34,7 +34,8 @@
 			style="@android:style/Widget.Material.Button"
 			android:layout_width="wrap_content"
 			android:layout_height="59dp"
-			android:text="@string/subtract_button_text" />
+			android:text="@string/subtract_button_text"
+			android:textSize="24sp" />
 
 		<EditText
 			android:id="@+id/txtEditMoney"
@@ -46,14 +47,17 @@
 			android:hint="@string/txt_edit_money_hint_text"
 			android:inputType="numberDecimal"
 			android:minHeight="48dp"
-			android:textAlignment="center" />
+			android:textAlignment="center"
+			android:textColorHint="#78909C"
+			android:textSize="24sp" />
 
 		<Button
 			android:id="@+id/btnAdd"
 			style="@android:style/Widget.Material.Button"
 			android:layout_width="wrap_content"
 			android:layout_height="59dp"
-			android:text="@string/add_button_text" />
+			android:text="@string/add_button_text"
+			android:textSize="24sp" />
 	</LinearLayout>
 
 	<Button
@@ -61,5 +65,6 @@
 		style="@android:style/Widget.Material.Button"
 		android:layout_width="match_parent"
 		android:layout_height="64dp"
-		android:text="@string/reset_button_text" />
+		android:text="@string/reset_button_text"
+		android:textSize="24sp" />
 </LinearLayout>

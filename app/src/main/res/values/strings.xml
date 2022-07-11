@@ -1,7 +1,11 @@
 <resources>
 	<string name="app_name">DailyFinance</string>
-	<string name="daily_money_default_text">Daily: ---,-- € (for -- days)</string>
-	<string name="total_money_default_text">Total: ---,-- €</string>
+	<plurals name="remaining_days_text">
+		<item quantity="one">(for %d day)</item>
+		<item quantity="other">(for %d days)</item>
+	</plurals>
+	<string name="daily_money_text">Daily: %.2f € %s</string>
+	<string name="total_money_text">Total: %.2f €</string>
 	<string name="subtract_button_text">-</string>
 	<string name="add_button_text">+</string>
 	<string name="reset_button_text">Reset</string>
