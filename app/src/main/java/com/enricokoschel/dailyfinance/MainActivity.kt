@@ -6,6 +6,9 @@ import android.os.Bundle
 import com.enricokoschel.dailyfinance.databinding.ActivityMainBinding
 import java.io.FileNotFoundException
 import java.lang.NumberFormatException
+import java.time.Month
+import java.time.YearMonth
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 	private enum class ButtonType {
@@ -35,7 +38,8 @@ class MainActivity : AppCompatActivity() {
 	private fun setMoneyText() {
 		val totalMoneyDouble = totalMoney / 100.0
 
-		val remainingDays = 12
+		val remainingDays =
+			YearMonth.now().lengthOfMonth() - java.time.LocalDate.now().dayOfMonth + 1
 		val dailyMoneyDouble = totalMoneyDouble / remainingDays
 
 		val remainingDaysString =
@@ -43,7 +47,8 @@ class MainActivity : AppCompatActivity() {
 
 		binding.txtMoneyDaily.text =
 			resources.getString(R.string.daily_money_text, dailyMoneyDouble, remainingDaysString)
-		binding.txtMoneyTotal.text = resources.getString(R.string.total_money_text, totalMoneyDouble)
+		binding.txtMoneyTotal.text =
+			resources.getString(R.string.total_money_text, totalMoneyDouble)
 	}
 
 	private fun commonButtonHandler(type: ButtonType) {
