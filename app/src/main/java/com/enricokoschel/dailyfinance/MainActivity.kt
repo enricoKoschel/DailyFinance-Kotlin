@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.enricokoschel.dailyfinance.databinding.ActivityMainBinding
 import java.io.FileNotFoundException
 import java.lang.NumberFormatException
+import java.nio.ByteBuffer
 import java.time.Month
 import java.time.YearMonth
 import java.util.*
@@ -86,12 +87,7 @@ class MainActivity : AppCompatActivity() {
 			val array = ByteArray(4)
 			applicationContext.openFileInput(saveFileName).read(array)
 
-			val b3 = (array[3].toUInt() shl 24) and (0xFFu shl 24)
-			val b2 = (array[2].toUInt() shl 16) and (0xFFu shl 16)
-			val b1 = (array[1].toUInt() shl 8) and (0xFFu shl 8)
-			val b0 = array[0].toUInt() and 0xFFu
-
-			(b3 or b2 or b1 or b0).toInt()
+			ByteBuffer.wrap(array.reversedArray()).int
 		} catch (e: FileNotFoundException) {
 			0
 		}
