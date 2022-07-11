@@ -50,9 +50,11 @@ class MainActivity : AppCompatActivity() {
 		when (type) {
 			ButtonType.Add -> {
 				totalMoney += getEnteredMoneyInCents()
+				binding.txtEditMoney.setText("")
 			}
 			ButtonType.Sub -> {
 				totalMoney -= getEnteredMoneyInCents()
+				binding.txtEditMoney.setText("")
 			}
 			ButtonType.Reset -> {
 				totalMoney = 0
