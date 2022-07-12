@@ -9,5 +9,8 @@
 	<string name="subtract_button_text">-</string>
 	<string name="add_button_text">+</string>
 	<string name="reset_button_text">Reset</string>
-	<string name="txt_edit_money_hint_text">Amount</string>
+	<string name="money_amount_hint_text">Amount</string>
+	<string name="bank_account_money_text">Bank account: %.2f €</string>
+	<string name="end_of_last_month_text">End of last month:</string>
+	<string name="euro_symbol">€</string>
 </resources>

@@ -3,19 +3,19 @@ package com.enricokoschel.dailyfinance
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.widget.addTextChangedListener
 import com.enricokoschel.dailyfinance.databinding.ActivityMainBinding
 import java.io.FileNotFoundException
 import java.lang.NumberFormatException
 import java.nio.ByteBuffer
-import java.time.Month
 import java.time.YearMonth
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
-	private enum class ButtonType {
-		Add,
-		Sub,
-		Reset
+	private enum class EventType {
+		AddButtonPressed,
+		SubButtonPressed,
+		ResetButtonPressed,
+		EndOfLastMonthTextChanged,
 	}
 
 	private lateinit var binding: ActivityMainBinding
@@ -23,9 +23,22 @@ class MainActivity : AppCompatActivity() {
 	private val saveFileName = "SAVED_MONEY"
 
 	private var totalMoney = 0
+	private var endOfLastMonthMoney = 0
 
 	private fun getEnteredMoneyInCents(): Int {
 		val enteredMoneyString = binding.txtEditMoney.text.toString()
+
+		val enteredMoney = try {
+			enteredMoneyString.toDouble() * 100
+		} catch (e: NumberFormatException) {
+			0.0
+		}
+
+		return enteredMoney.toInt()
+	}
+
+	private fun getEndOfLastMonthMoneyInCents(): Int {
+		val enteredMoneyString = binding.txtEditEndOfLastMonth.text.toString()
 
 		val enteredMoney = try {
 			enteredMoneyString.toDouble() * 100
@@ -50,21 +63,32 @@ class MainActivity : AppCompatActivity() {
 			resources.getString(R.string.daily_money_text, dailyMoneyDouble, remainingDaysString)
 		binding.txtMoneyTotal.text =
 			resources.getString(R.string.total_money_text, totalMoneyDouble)
+
+		val bankAccountMoneyDouble = (totalMoney + endOfLastMonthMoney) / 100.0
+
+		binding.txtBankAccount.text =
+			resources.getString(R.string.bank_account_money_text, bankAccountMoneyDouble)
 	}
 
-	private fun commonButtonHandler(type: ButtonType) {
+	private fun commonEventHandler(type: EventType) {
 		when (type) {
-			ButtonType.Add -> {
+			EventType.AddButtonPressed -> {
 				totalMoney += getEnteredMoneyInCents()
 				binding.txtEditMoney.setText("")
 			}
-			ButtonType.Sub -> {
+			EventType.SubButtonPressed -> {
 				totalMoney -= getEnteredMoneyInCents()
 				binding.txtEditMoney.setText("")
 			}
-			ButtonType.Reset -> {
+			EventType.ResetButtonPressed -> {
 				totalMoney = 0
 				binding.txtEditMoney.setText("")
+
+				endOfLastMonthMoney = 0
+				binding.txtEditEndOfLastMonth.setText("")
+			}
+			EventType.EndOfLastMonthTextChanged -> {
+				endOfLastMonthMoney = getEndOfLastMonthMoneyInCents()
 			}
 		}
 
@@ -73,23 +97,34 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	private fun saveMoney() {
-		val array = ByteArray(4)
+		val array = ByteArray(8)
 		array[0] = totalMoney.toByte()
 		array[1] = (totalMoney ushr 8).toByte()
 		array[2] = (totalMoney ushr 16).toByte()
 		array[3] = (totalMoney ushr 24).toByte()
 
+		array[4] = endOfLastMonthMoney.toByte()
+		array[5] = (endOfLastMonthMoney ushr 8).toByte()
+		array[6] = (endOfLastMonthMoney ushr 16).toByte()
+		array[7] = (endOfLastMonthMoney ushr 24).toByte()
+
 		applicationContext.openFileOutput(saveFileName, Context.MODE_PRIVATE).write(array)
 	}
 
 	private fun restoreMoney() {
-		totalMoney = try {
+		try {
+			val file = applicationContext.openFileInput(saveFileName)
 			val array = ByteArray(4)
-			applicationContext.openFileInput(saveFileName).read(array)
 
-			ByteBuffer.wrap(array.reversedArray()).int
+			file.read(array)
+			totalMoney = ByteBuffer.wrap(array.reversedArray()).int
+
+			file.read(array)
+			endOfLastMonthMoney = ByteBuffer.wrap(array.reversedArray()).int
+			binding.txtEditEndOfLastMonth.setText((endOfLastMonthMoney / 100.0).toString())
 		} catch (e: FileNotFoundException) {
-			0
+			totalMoney = 0
+			endOfLastMonthMoney = 0
 		}
 	}
 
@@ -102,16 +137,20 @@ class MainActivity : AppCompatActivity() {
 		setMoneyText()
 
 		binding.btnReset.setOnLongClickListener {
-			commonButtonHandler(ButtonType.Reset)
+			commonEventHandler(EventType.ResetButtonPressed)
 			true
 		}
 
 		binding.btnAdd.setOnClickListener {
-			commonButtonHandler(ButtonType.Add)
+			commonEventHandler(EventType.AddButtonPressed)
 		}
 
 		binding.btnSub.setOnClickListener {
-			commonButtonHandler(ButtonType.Sub)
+			commonEventHandler(EventType.SubButtonPressed)
+		}
+
+		binding.txtEditEndOfLastMonth.addTextChangedListener {
+			commonEventHandler(EventType.EndOfLastMonthTextChanged)
 		}
 	}
 }
