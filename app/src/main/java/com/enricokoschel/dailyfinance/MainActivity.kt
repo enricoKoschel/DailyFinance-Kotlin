@@ -121,7 +121,10 @@ class MainActivity : AppCompatActivity() {
 
 			file.read(array)
 			endOfLastMonthMoney = ByteBuffer.wrap(array.reversedArray()).int
-			binding.txtEditEndOfLastMonth.setText((endOfLastMonthMoney / 100.0).toString())
+
+			if (endOfLastMonthMoney != 0) {
+				binding.txtEditEndOfLastMonth.setText((endOfLastMonthMoney / 100.0).toString())
+			}
 		} catch (e: FileNotFoundException) {
 			totalMoney = 0
 			endOfLastMonthMoney = 0
