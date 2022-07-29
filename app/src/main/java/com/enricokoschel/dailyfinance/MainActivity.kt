@@ -1,14 +1,14 @@
 package com.enricokoschel.dailyfinance
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.enricokoschel.dailyfinance.databinding.ActivityMainBinding
 import java.io.FileNotFoundException
-import java.lang.NumberFormatException
 import java.nio.ByteBuffer
 import java.time.YearMonth
+
 
 class MainActivity : AppCompatActivity() {
 	private enum class EventType {
@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 		SubButtonPressed,
 		ResetButtonPressed,
 		EndOfLastMonthTextChanged,
+		AddNextMonthSwitchChanged,
 	}
 
 	private lateinit var binding: ActivityMainBinding
@@ -49,11 +50,18 @@ class MainActivity : AppCompatActivity() {
 		return enteredMoney.toInt()
 	}
 
-	private fun setMoneyText() {
+	private fun setText() {
 		val totalMoneyDouble = totalMoney / 100.0
 
-		val remainingDays =
+		var remainingDays =
 			YearMonth.now().lengthOfMonth() - java.time.LocalDate.now().dayOfMonth + 1
+
+		if (binding.switchAddNextMonth.isChecked) {
+			val daysToAdd = YearMonth.now().plusMonths(1).lengthOfMonth()
+
+			remainingDays += daysToAdd
+		}
+
 		val dailyMoneyDouble = totalMoneyDouble / remainingDays
 
 		val remainingDaysString =
@@ -86,18 +94,22 @@ class MainActivity : AppCompatActivity() {
 
 				endOfLastMonthMoney = 0
 				binding.txtEditEndOfLastMonth.setText("")
+
+				binding.switchAddNextMonth.isChecked = false
 			}
 			EventType.EndOfLastMonthTextChanged -> {
 				endOfLastMonthMoney = getEndOfLastMonthMoneyInCents()
 			}
+			EventType.AddNextMonthSwitchChanged -> {
+			}
 		}
 
-		saveMoney()
-		setMoneyText()
+		saveState()
+		setText()
 	}
 
-	private fun saveMoney() {
-		val array = ByteArray(8)
+	private fun saveState() {
+		val array = ByteArray(9)
 		array[0] = totalMoney.toByte()
 		array[1] = (totalMoney ushr 8).toByte()
 		array[2] = (totalMoney ushr 16).toByte()
@@ -108,23 +120,34 @@ class MainActivity : AppCompatActivity() {
 		array[6] = (endOfLastMonthMoney ushr 16).toByte()
 		array[7] = (endOfLastMonthMoney ushr 24).toByte()
 
+		array[8] = if (binding.switchAddNextMonth.isChecked) {
+			1
+		} else {
+			0
+		}
+
 		applicationContext.openFileOutput(saveFileName, Context.MODE_PRIVATE).write(array)
 	}
 
-	private fun restoreMoney() {
+	private fun restoreState() {
 		try {
 			val file = applicationContext.openFileInput(saveFileName)
-			val array = ByteArray(4)
+			val array4 = ByteArray(4)
 
-			file.read(array)
-			totalMoney = ByteBuffer.wrap(array.reversedArray()).int
+			file.read(array4)
+			totalMoney = ByteBuffer.wrap(array4.reversedArray()).int
 
-			file.read(array)
-			endOfLastMonthMoney = ByteBuffer.wrap(array.reversedArray()).int
+			file.read(array4)
+			endOfLastMonthMoney = ByteBuffer.wrap(array4.reversedArray()).int
 
 			if (endOfLastMonthMoney != 0) {
 				binding.txtEditEndOfLastMonth.setText((endOfLastMonthMoney / 100.0).toString())
 			}
+
+			val array1 = ByteArray(1)
+			file.read(array1)
+
+			binding.switchAddNextMonth.isChecked = array1[0] != 0.toByte()
 		} catch (e: FileNotFoundException) {
 			totalMoney = 0
 			endOfLastMonthMoney = 0
@@ -136,8 +159,8 @@ class MainActivity : AppCompatActivity() {
 		binding = ActivityMainBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 
-		restoreMoney()
-		setMoneyText()
+		restoreState()
+		setText()
 
 		binding.btnReset.setOnLongClickListener {
 			commonEventHandler(EventType.ResetButtonPressed)
@@ -153,6 +176,10 @@ class MainActivity : AppCompatActivity() {
 		}
 
 		binding.txtEditEndOfLastMonth.addTextChangedListener {
+			commonEventHandler(EventType.EndOfLastMonthTextChanged)
+		}
+
+		binding.switchAddNextMonth.setOnCheckedChangeListener { _, _ ->
 			commonEventHandler(EventType.EndOfLastMonthTextChanged)
 		}
 	}

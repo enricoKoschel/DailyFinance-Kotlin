@@ -16,6 +16,7 @@
 			android:layout_height="wrap_content"
 			android:text="@string/daily_money_text"
 			android:textAlignment="center"
+			android:textColor="@color/teal_700"
 			android:textSize="24sp" />
 
 		<TextView
@@ -25,6 +26,7 @@
 			android:layout_weight="1"
 			android:text="@string/end_of_last_month_text"
 			android:textAlignment="center"
+			android:textColor="@color/teal_700"
 			android:textSize="24sp" />
 
 		<EditText
@@ -37,6 +39,7 @@
 			android:importantForAutofill="no"
 			android:inputType="numberDecimal"
 			android:textAlignment="center"
+			android:textColor="@color/teal_700"
 			android:textColorHint="#78909C"
 			android:textSize="24sp"
 			tools:ignore="DuplicateSpeakableTextCheck" />
@@ -47,6 +50,7 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:text="@string/euro_symbol"
+			android:textColor="@color/teal_700"
 			android:textSize="24sp" />
 
 	</LinearLayout>
@@ -62,6 +66,7 @@
 			android:layout_height="wrap_content"
 			android:text="@string/total_money_text"
 			android:textAlignment="center"
+			android:textColor="@color/teal_700"
 			android:textSize="24sp" />
 
 		<TextView
@@ -70,9 +75,20 @@
 			android:layout_height="wrap_content"
 			android:text="@string/bank_account_money_text"
 			android:textAlignment="center"
+			android:textColor="@color/teal_700"
 			android:textSize="24sp" />
 
 	</LinearLayout>
+
+	<androidx.appcompat.widget.SwitchCompat
+		android:id="@+id/switchAddNextMonth"
+		android:layout_width="473dp"
+		android:layout_height="wrap_content"
+		android:minHeight="48dp"
+		android:text="@string/add_next_month_switch_text"
+		android:textAlignment="textEnd"
+		android:textColor="@color/teal_700"
+		android:textSize="24sp" />
 
 	<LinearLayout
 		android:layout_width="match_parent"
@@ -94,12 +110,13 @@
 			android:layout_weight="1"
 			android:ems="10"
 			android:hint="@string/money_amount_hint_text"
+			android:importantForAutofill="no"
 			android:inputType="numberDecimal"
 			android:minHeight="48dp"
 			android:textAlignment="center"
+			android:textColor="@color/teal_700"
 			android:textColorHint="#78909C"
-			android:textSize="24sp"
-			android:importantForAutofill="no" />
+			android:textSize="24sp" />
 
 		<Button
 			android:id="@+id/btnAdd"

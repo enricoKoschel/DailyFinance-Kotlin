@@ -13,4 +13,5 @@
 	<string name="bank_account_money_text">Bank account: %.2f €</string>
 	<string name="end_of_last_month_text">End of last month:</string>
 	<string name="euro_symbol">€</string>
+	<string name="add_next_month_switch_text">Add next month</string>
 </resources>
